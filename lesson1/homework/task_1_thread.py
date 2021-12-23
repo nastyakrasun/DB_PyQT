@@ -38,6 +38,12 @@ def check_is_ipaddress(value):
 
 
 def ping(ipv4, result, get_list):
+    """
+    :param ipv4: ip-адрес
+    :param result: доступные узлы
+    :param get_list: результаты в словаре
+    :return res: доступен/нет узел
+    """
     param = '-n' if platform.system().lower() == 'windows' else '-c'
     response = subprocess.Popen(["ping", param, '1', str(ipv4)], stdout=subprocess.PIPE)
     if response.wait() == 0:
