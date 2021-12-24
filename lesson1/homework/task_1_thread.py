@@ -8,6 +8,10 @@
 («Узел доступен», «Узел недоступен»). При этом ip-адрес
 сетевого узла должен создаваться с помощью функции ip_address().
 """
+# вариант thread - с ускорением
+# пингование (занимает больше всего времени) выводим отдельным потоком
+# line81: thread = threading.Thread(target=ping, args=(ipv4, result, get_list), daemon=True)
+# этот вариант лучше task_1.py
 
 import os
 import platform
@@ -39,9 +43,10 @@ def check_is_ipaddress(value):
 
 def ping(ipv4, result, get_list):
     """
+    создание сабпроцесса с нужным ip
     :param ipv4: ip-адрес
-    :param result: доступные узлы
-    :param get_list: результаты в словаре
+    :param result: доступные/недоступные узлы
+    :param get_list: результаты возвращать/нет в словарь
     :return res: доступен/нет узел
     """
     param = '-n' if platform.system().lower() == 'windows' else '-c'
@@ -68,7 +73,7 @@ def host_ping(hosts_list, get_list=False):
     :return словарь результатов проверки, если требуется
     """
     print("Начинаю проверку доступности узлов...")
-    threads = []
+    threads = []  # создаём список потоков
     for host in hosts_list:  # проверяем, является ли значение ip-адресом
         try:
             ipv4 = check_is_ipaddress(host)
@@ -76,14 +81,17 @@ def host_ping(hosts_list, get_list=False):
             print(f'{host} - {e} воспринимаю как доменное имя')
             ipv4 = host
 
+        # создаём поток по кажд хосту
         thread = threading.Thread(target=ping, args=(ipv4, result, get_list), daemon=True)
-        thread.start()
-        threads.append(thread)
+        thread.start()  # запускаем поток по кажд хосту
+        threads.append(thread)   # добавляем поток в список
 
-    for thread in threads:
-        thread.join()
+    for thread in threads:  # чтобы иметь результат, нам нужно присоединиться к потоку
+        thread.join()  # присоединяемся осн поток программы к каждому потоку
+        # присоединяемся ко всем потокам вне цикла <for host in hosts_list>,
+        # поскольку в цикле join() задержит подключение след потока до завершения предыдущего
 
-    if get_list:        # если требуется вернуть словарь (для задачи №3), то возвращаем
+    if get_list:  # если требуется вернуть словарь (для задачи №3), то возвращаем
         return result
 
 

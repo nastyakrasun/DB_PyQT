@@ -44,24 +44,25 @@ def host_ping(hosts_list, get_list=False):
     :return словарь результатов проверки, если требуется
     """
     print("Начинаю проверку доступности узлов...")
-    for host in hosts_list:  # проверяем, является ли значение ip-адресом
+    for host in hosts_list:
         try:
-            ipv4 = check_is_ipaddress(host)
+            ipv4 = check_is_ipaddress(host)  # проверяем, является ли значение ip-адресом
         except Exception as e:
             print(f'{host} - {e} воспринимаю как доменное имя')
             ipv4 = host
 
         param = '-n' if platform.system().lower() == 'windows' else '-c'
         response = subprocess.Popen(["ping", param, '1', str(ipv4)], stdout=subprocess.PIPE)
+        # '1' указ что нам нужно проверить минимум пакетов - не ждать, не загружать систему
         if response.wait() == 0:
             result["Доступные узлы"] += f"{str(ipv4)}\n"
             res_string = f"{str(ipv4)} - Узел доступен"
         else:
-            result["Недоступные узлы"] += f"{ipv4}\n"
+            result["Недоступные узлы"] += f"{ipv4}\n"  # битый адрес
             res_string = f"{str(ipv4)} - Узел недоступен"
         if not get_list:  # если результаты не надо добавлять в словарь, значит отображаем
             print(res_string)
-    if get_list:        # если требуется вернуть словарь (для задачи №3), то возвращаем
+    if get_list:  # если требуется вернуть словарь (для задачи №3), то возвращаем
         return result
 
 

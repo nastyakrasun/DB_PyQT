@@ -7,7 +7,7 @@
 # для формирования списка хостов и проверки доступности используем функцию из задания 2
 from tabulate import tabulate
 from task_2 import host_range_ping
-
+import time
 
 def host_range_ping_tab():
     """
@@ -21,4 +21,7 @@ def host_range_ping_tab():
 
 
 if __name__ == "__main__":
+    start = time.time()
     host_range_ping_tab()
+    end = time.time()
+    print(f'время проверки: {int(end - start)}')
