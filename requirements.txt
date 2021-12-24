@@ -9,6 +9,7 @@ psutil==5.8.0
 py==1.11.0
 pyparsing==3.0.6
 pytest==6.2.5
+tabulate==0.8.9
 toml==0.10.2
 
 # pip freeze > requirements.txt
