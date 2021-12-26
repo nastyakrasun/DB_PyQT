@@ -6,15 +6,18 @@
 class MyMetaClass(type):
 
     def __new__(cls, name, bases, dict):
+        # меняем в классе всё, что нам захочется
         new_class = super(MyMetaClass, cls).__new__(cls, name, bases, dict)
         print(f'__new__({name}, {bases}, {dict}) -> {new_class}')
         return new_class
 
     def __init__(cls, name, bases, dict):
+        # получаем инфу о классе-наследнике для дальнейшей работы с ней
         super(MyMetaClass, cls).__init__(name, bases, dict)
         print(f'__init__({name}, {bases}, {dict})')
 
     def __call__(cls, *args, **kwargs):
+        # можем изменить метод __call__
         obj = super(MyMetaClass, cls).__call__(*args, **kwargs)
         print(f'__call__({args}, {kwargs}) -> {obj}')
         return obj
