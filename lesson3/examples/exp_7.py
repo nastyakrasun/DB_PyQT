@@ -8,7 +8,7 @@ from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine('sqlite:///declarative_style_base.db3', echo=True)
+engine = create_engine('sqlite:///declarative_style_base.db3', echo=False)
 
 # Функция declarative_base(), что определяет новый класс Base,
 # от которого будут унаследованы все наши ORM-классы.
@@ -37,7 +37,7 @@ sess = Session()
 
 
 if __name__ == '__main__':
-    user = User("Пётр", "Петров", "pass_Peter")
+    user = User("Иван", "Петров", "pass_Peter")
     sess.add(user)
     sess.commit()
     print('id: ', user.id)
